@@ -1,0 +1,1 @@
+<img {{ $attributes->merge(['src' => asset('images/hotel-logo.jpeg'), 'alt' => 'Logo Hotel']) }}>

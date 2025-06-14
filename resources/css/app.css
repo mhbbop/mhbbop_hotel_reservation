@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hotel-bg {
+    background-image: url('/public/images/background-hotel.jpg');
+    background-size: cover;
+    background-position: center;
+}
