@@ -14,9 +14,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         @forelse ($rooms as $room)
                             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                                {{-- Placeholder untuk gambar kamar --}}
-                                <div class="h-48 bg-gray-300 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x300.png/CCCCCC/FFFFFF?text=Hotel+Room');">
-                                </div>
+                                @php
+                                    // Mengubah tipe kamar menjadi nama file gambar, contoh: "Single" -> "single.jpg"
+                                    $imageName = strtolower($room->type) . '.jpg';
+                                @endphp
+                                <img class="h-48 w-full object-cover" src="{{ asset('images/' . $imageName) }}" alt="Foto Kamar {{ $room->type }}">
                                 <div class="p-6">
                                     <h3 class="text-2xl font-bold text-gray-800">{{ $room->type }} (No. {{ $room->room_number }})</h3>
                                     <p class="text-sm text-gray-600 mt-2 h-20 overflow-hidden">{{ $room->description }}</p>

@@ -3,77 +3,83 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Room;
 use App\Models\Reservation;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
     /**
-     * Menyimpan reservasi baru yang dibuat oleh tamu.
+     * Display a listing of the resource.
+     * ===== TAMBAHKAN METHOD INI =====
      */
-    public function store(Request $request)
+    public function index()
     {
-        // 1. Validasi Input
-        $validated = $request->validate([
-            'room_id' => 'required|exists:rooms,id',
-            'check_in_date' => 'required|date|after_or_equal:today',
-            'check_out_date' => 'required|date|after:check_in_date',
-        ]);
-
-        $roomId = $validated['room_id'];
-        $checkInDate = Carbon::parse($validated['check_in_date']);
-        $checkOutDate = Carbon::parse($validated['check_out_date']);
-
-        // 2. Cek Ketersediaan Kamar
-        $isNotAvailable = Reservation::where('room_id', $roomId)
-            ->where(function ($query) use ($checkInDate, $checkOutDate) {
-                $query->where(function ($q) use ($checkInDate, $checkOutDate) {
-                    $q->where('check_in_date', '<=', $checkInDate)
-                      ->where('check_out_date', '>', $checkInDate);
-                })->orWhere(function ($q) use ($checkInDate, $checkOutDate) {
-                    $q->where('check_in_date', '<', $checkOutDate)
-                      ->where('check_out_date', '>=', $checkOutDate);
-                })->orWhere(function ($q) use ($checkInDate, $checkOutDate) {
-                    $q->where('check_in_date', '>=', $checkInDate)
-                      ->where('check_out_date', '<=', $checkOutDate);
-                });
-            })->exists();
-
-        if ($isNotAvailable) {
-            return back()->withErrors(['check_in_date' => 'Kamar tidak tersedia pada rentang tanggal yang Anda pilih.'])->withInput();
-        }
-
-        // 3. Hitung Total Harga
-        $room = Room::findOrFail($roomId);
-        $numberOfNights = $checkInDate->diffInDays($checkOutDate);
-        $totalPrice = $numberOfNights * $room->price_per_night;
-
-        // 4. Buat Reservasi dengan status 'pending_payment'
-        $reservation = Reservation::create([
-            'user_id' => Auth::id(),
-            'room_id' => $roomId,
-            'check_in_date' => $checkInDate,
-            'check_out_date' => $checkOutDate,
-            'total_price' => $totalPrice,
-            'status' => 'pending_payment',
-        ]);
-
-        // 5. Redirect ke halaman pembayaran dengan membawa data reservasi yang baru dibuat
-        return redirect()->route('guest.reservations.payment', $reservation);
+        // Ambil data reservasi beserta data user dan kamar yang terhubung
+        $reservations = Reservation::with(['user', 'room'])->latest()->get();
+        return view('admin.reservations.index', compact('reservations'));
     }
 
     /**
-     * Menampilkan halaman instruksi pembayaran.
+     * Show the form for creating a new resource.
      */
-    public function payment(Reservation $reservation)
+    public function create()
     {
-        // Pastikan tamu hanya bisa melihat halaman pembayaran reservasi miliknya
-        if ($reservation->user_id != Auth::id()) {
-            abort(403);
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Reservation $reservation)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Reservation $reservation)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Reservation $reservation)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Reservation $reservation)
+    {
+        // Logika Hapus yang sudah kita buat sebelumnya
+        if ($reservation->status === 'checked_in') {
+            $reservation->room->update(['status' => 'available']);
         }
-        return view('guest.reservations.payment', compact('reservation'));
+        $reservation->delete();
+        return redirect()->route('admin.reservations.index')->with('success', 'Reservasi berhasil dihapus.');
+    }
+
+    /**
+     * Mengonfirmasi pembayaran reservasi.
+     */
+    public function confirmPayment(Reservation $reservation)
+    {
+        // Ubah status reservasi menjadi 'confirmed'
+        $reservation->update(['status' => 'confirmed']);
+
+        return redirect()->route('admin.reservations.index')->with('success', 'Pembayaran berhasil dikonfirmasi.');
     }
 }

@@ -14,15 +14,32 @@
             <div>
                 <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Hotel Admin</h2>
                 <nav>
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200 text-gray-700">
+                    {{-- Link ke Dashboard Admin --}}
+                    <a href="{{ route('admin.dashboard') }}" 
+                    class="flex items-center py-2.5 px-4 rounded-lg transition duration-200 
+                            {{ request()->routeIs('admin.dashboard') 
+                                ? 'bg-blue-600 text-white shadow-lg' 
+                                : 'text-gray-700 hover:bg-gray-200' }}">
                         <i class="fas fa-tachometer-alt w-6"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
-                    <a href="{{ route('admin.rooms.index') }}" class="flex items-center mt-2 py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200 text-gray-700">
+
+                    {{-- Link ke Manajemen Kamar --}}
+                    <a href="{{ route('admin.rooms.index') }}" 
+                    class="flex items-center mt-2 py-2.5 px-4 rounded-lg transition duration-200 
+                            {{ request()->routeIs('admin.rooms.*') 
+                                ? 'bg-blue-600 text-white shadow-lg' 
+                                : 'text-gray-700 hover:bg-gray-200' }}">
                         <i class="fas fa-bed w-6"></i>
                         <span class="ml-3">Manajemen Kamar</span>
                     </a>
-                    <a href="{{ route('admin.reservations.index') }}" class="flex items-center mt-2 py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200 text-gray-700">
+
+                    {{-- Link ke Manajemen Tamu --}}
+                    <a href="{{ route('admin.reservations.index') }}" 
+                    class="flex items-center mt-2 py-2.5 px-4 rounded-lg transition duration-200 
+                            {{ request()->routeIs('admin.reservations.*') 
+                                ? 'bg-blue-600 text-white shadow-lg' 
+                                : 'text-gray-700 hover:bg-gray-200' }}">
                         <i class="fas fa-users w-6"></i>
                         <span class="ml-3">Manajemen Tamu</span>
                     </a>
