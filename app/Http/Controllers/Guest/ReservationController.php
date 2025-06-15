@@ -27,7 +27,7 @@ class ReservationController extends Controller
         $checkInDate = Carbon::parse($validated['check_in_date']);
         $checkOutDate = Carbon::parse($validated['check_out_date']);
 
-        // 2. Cek Ketersediaan Kamar pada Rentang Tanggal yang Dipilih
+        // 2. Cek Ketersediaan Kamar
         $isNotAvailable = Reservation::where('room_id', $roomId)
             ->where(function ($query) use ($checkInDate, $checkOutDate) {
                 $query->where(function ($q) use ($checkInDate, $checkOutDate) {
@@ -52,7 +52,7 @@ class ReservationController extends Controller
         $totalPrice = $numberOfNights * $room->price_per_night;
 
         // 4. Buat Reservasi
-        Reservation::create([
+        $reservation = Reservation::create([
             'user_id' => Auth::id(),
             'room_id' => $roomId,
             'check_in_date' => $checkInDate,
@@ -61,7 +61,20 @@ class ReservationController extends Controller
             'status' => 'pending_payment',
         ]);
 
-        // 5. Redirect ke Dashboard Tamu dengan Pesan Sukses
-        return redirect()->route('dashboard')->with('success', 'Reservasi Anda berhasil dibuat!');
+        // 5. INI PERBAIKANNYA: Redirect ke halaman pembayaran
+        return redirect()->route('guest.reservations.payment', $reservation);
+    }
+
+    /**
+     * Menampilkan halaman instruksi pembayaran.
+     * Pastikan method ini ada.
+     */
+    public function payment(Reservation $reservation)
+    {
+        // Pastikan tamu hanya bisa melihat halaman pembayaran reservasi miliknya
+        if ($reservation->user_id != Auth::id()) {
+            abort(403);
+        }
+        return view('guest.reservations.payment', compact('reservation'));
     }
 }

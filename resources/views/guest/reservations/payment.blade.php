@@ -31,7 +31,8 @@
                         </div>
                     </div>
 
-                    <div x-show="paymentMethod" class="mt-6 text-left bg-gray-50 p-6 rounded-lg border border-gray-200 transition-all" style="display: none;">
+                    {{-- PERBAIKAN ADA DI BARIS INI: style="display: none;" dihapus --}}
+                    <div x-show="paymentMethod" class="mt-6 text-left bg-gray-50 p-6 rounded-lg border border-gray-200 transition-all">
                         <div x-show="paymentMethod === 'bank_transfer'">
                             <h4 class="font-semibold text-gray-800">Instruksi Transfer Bank</h4>
                             <ul class="list-disc list-inside mt-2 space-y-2 text-sm">
