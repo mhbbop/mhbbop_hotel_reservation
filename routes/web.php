@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::post('/reservations/{reservation}/confirm', [AdminReservationController::class, 'confirmPayment'])->name('reservations.confirm');
+    Route::post('/reservations/{reservation}/checkin', [AdminReservationController::class, 'checkIn'])->name('reservations.checkin');
     Route::resource('rooms', AdminRoomController::class);
     Route::resource('reservations', AdminReservationController::class);
 });

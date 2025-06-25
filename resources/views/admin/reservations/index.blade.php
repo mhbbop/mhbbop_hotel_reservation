@@ -33,20 +33,38 @@
                             {{ ucfirst(str_replace('_', ' ', $reservation->status)) }}
                         </span>
                     </td>
-                    <td class="py-2 px-4 border-b">
-                        @if($reservation->status == 'pending_payment')
-                            <form action="{{ route('admin.reservations.confirm', $reservation->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white text-xs font-bold py-1 px-2 rounded">
-                                    Konfirmasi Bayar
-                                </button>
-                            </form>
-                        @elseif($reservation->status == 'confirmed')
-                            {{-- Tombol Check-in akan kita buat nanti --}}
-                            <button class="bg-blue-500 text-white text-xs font-bold py-1 px-2 rounded opacity-50 cursor-not-allowed">Check-in</button>
-                        @else
-                            -
-                        @endif
+                        <td class="py-2 px-4 border-b">
+                            <div class="flex items-center justify-center gap-2">
+                                @if($reservation->status == 'pending_payment')
+                                    <form action="{{ route('admin.reservations.confirm', $reservation->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="border border-green-500 text-green-600 hover:bg-green-500 hover:text-white text-xs font-semibold py-1 px-3 rounded-md transition-colors">
+                                            Konfirmasi Bayar
+                                        </button>
+                                    </form>
+                                @elseif($reservation->status == 'confirmed')
+                                    <form action="{{ route('admin.reservations.checkin', $reservation->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white text-xs font-semibold py-1 px-3 rounded-md transition-colors">
+                                            Check-in
+                                        </button>
+                                    </form>
+                                @elseif($reservation->status == 'checked_in')
+                                    <span class="text-green-600 font-semibold">Checked In</span>
+                                @else
+                                    <span class="text-gray-500">Selesai</span>
+                                @endif
+
+                                {{-- Form untuk Hapus --}}
+                                <form action="{{ route('admin.reservations.destroy', $reservation->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus reservasi ini secara permanen?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-xs font-semibold py-1 px-3 rounded-md transition-colors">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </td>
                 </tr>
             @empty

@@ -51,8 +51,9 @@
                     </div>
 
                     <div class="mt-8 text-center">
-                        <p class="text-xs text-red-600 mt-4">Status reservasi Anda saat ini adalah "Menunggu Pembayaran".</p>
-                        <a href="{{ route('dashboard') }}" class="mt-4 inline-block text-blue-500 hover:text-blue-700 font-semibold">
+                        <p class="text-xs text-red-600 mt-4">Status reservasi Anda saat ini adalah "Menunggu Pembayaran". Silahkan datang ke hotel lalu tampilkan bukti pembayaran.</p>
+                        <p class="text-xs text-red-600 mt-4">.</p>
+                        <a href="{{ route('dashboard') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Kembali ke Dashboard
                         </a>
                     </div>

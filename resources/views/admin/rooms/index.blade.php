@@ -36,15 +36,22 @@
                             {{ ucfirst($room->status) }}
                         </span>
                     </td>
-                    <td class="py-2 px-4 border-b">
-                        <a href="{{ route('admin.rooms.edit', $room->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
-                        
-                        {{-- Tombol Hapus --}}
-                        <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kamar ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:text-red-700 ml-4">Hapus</button>
-                        </form>
+                        <td class="py-2 px-4 border-b">
+                        <div class="flex items-center justify-center gap-2">
+                            {{-- Tombol Edit --}}
+                            <a href="{{ route('admin.rooms.edit', $room->id) }}" class="border border-yellow-500 text-yellow-600 hover:bg-yellow-500 hover:text-white text-xs font-semibold py-1 px-3 rounded-md transition-colors">
+                                Edit
+                            </a>
+                            
+                            {{-- Tombol Hapus --}}
+                            <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus kamar ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-xs font-semibold py-1 px-3 rounded-md transition-colors">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty

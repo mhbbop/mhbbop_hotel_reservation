@@ -82,4 +82,18 @@ class ReservationController extends Controller
 
         return redirect()->route('admin.reservations.index')->with('success', 'Pembayaran berhasil dikonfirmasi.');
     }
+
+    /**
+     * Melakukan proses check-in untuk sebuah reservasi.
+     */
+    public function checkIn(Reservation $reservation)
+    {
+        // 1. Ubah status reservasi menjadi 'checked_in'
+        $reservation->update(['status' => 'checked_in']);
+
+        // 2. Ubah status kamar menjadi 'occupied'
+        $reservation->room->update(['status' => 'occupied']);
+
+        return redirect()->route('admin.reservations.index')->with('success', 'Tamu berhasil check-in.');
+    }
 }
