@@ -21,7 +21,7 @@
                         <table class="min-w-full bg-white">
                             <thead class="bg-gray-200">
                                 <tr>
-                                    <th class="py-2 px-4 border-b text-left">Tipe Kamar</th>
+                                    <th class="py-2 px-4 border-b text-left">Tipe dan No. Kamar</th>
                                     <th class="py-2 px-4 border-b text-left">Check-in</th>
                                     <th class="py-2 px-4 border-b text-left">Check-out</th>
                                     <th class="py-2 px-4 border-b text-left">Status</th>
