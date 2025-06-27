@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<h1 class="text-3xl font-bold text-gray-800 mb-6">Edit Kamar: {{ $room->room_number }}</h1>
+ <h1 class="text-3xl font-bold text-white drop-shadow-lg mb-6">Edit Kamar: {{ $room->room_number }}</h1>
 
 <div class="bg-white p-8 rounded-lg shadow-md">
     <form action="{{ route('admin.rooms.update', $room->id) }}" method="POST">
